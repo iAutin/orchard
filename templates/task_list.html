@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Task List{% endblock %}
+{% block content %}
+    <h1>All Projects and Tasks</h1>
+    <div class="task-list-container">
+        {% for project in projects %}
+            <div class="project-list-item">
+                <h3>
+                    {{ project.name }}
+                    <a href="{{ url_for('add_task', project_id=project.id) }}" class="btn btn-primary btn-sm ms-2">+</a>
+                </h3>
+                {% if project.tasks_sorted %}
+                    <ul class="task-list">
+                        {% for task in project.tasks_sorted %}
+                            <li class="task-item" style="background-color: {{ task.color }}">
+                                <span {% if task.completed %}class="completed-task"{% endif %}>
+                                    {{ task.description }} (Priority: {{ task.priority }})
+                                    {% if task.due_date %}
+                                        - Due: {{ task.due_date.strftime('%Y-%m-%d') }}
+                                    {% endif %}
+                                </span>
+                                <div class="task-actions">
+                                    <a href="{{ url_for('edit_task', task_id=task.id) }}" class="btn btn-warning btn-sm text-white">Edit</a>
+                                    <form action="{{ url_for('complete_task', task_id=task.id) }}" method="POST" class="d-inline">
+                                        <button type="submit" class="btn btn-success btn-sm text-white">✓</button>
+                                    </form>
+                                    <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST" class="d-inline">
+                                        <button type="submit" class="btn btn-danger btn-sm text-white">🗑️</button>
+                                    </form>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No tasks for this project.</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

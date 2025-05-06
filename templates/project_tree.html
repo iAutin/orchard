@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{{ project.name }}{% endblock %}
+{% block content %}
+    <h1>{{ project.name }}</h1>
+    <a href="{{ url_for('add_task', project_id=project.id) }}" class="btn btn-primary mb-3">Add Task</a>
+    <div class="tree">
+        {% for priority in priorities|sort(reverse=True) %}
+            <div class="task-group">
+                <h3>Priority {{ priority }}</h3>
+                <div class="task-row">
+                    {% for task in unfinished_tasks if task.priority == priority %}
+                        <a href="{{ url_for('edit_task', task_id=task.id) }}" class="task-square" style="background-color: {{ task.color }}">
+                            <div class="task-content">
+                                <span>{{ task.description }}</span>
+                                {% if task.due_date %}
+                                    <span class="task-due-date">Due: {{ task.due_date.strftime('%Y-%m-%d') }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="task-actions">
+                                <form action="{{ url_for('complete_task', task_id=task.id) }}" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-success btn-sm text-white">✓</button>
+                                </form>
+                                <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-danger btn-sm text-white">🗑️</button>
+                                </form>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+        <h3>Trunk (Completed Tasks)</h3>
+        <div class="task-group">
+            <div class="d-flex flex-nowrap">
+                {% for task in completed_tasks %}
+                    <div class="task-square completed-task" style="background-color: {{ task.color }}">
+                        <div class="task-content">
+                            <span>{{ task.description }} (Priority {{ task.priority }})</span>
+                            {% if task.due_date %}
+                                <span class="task-due-date">Due: {{ task.due_date.strftime('%Y-%m-%d') }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="task-actions">
+                            <form action="{{ url_for('uncomplete_task', task_id=task.id) }}" method="POST" class="d-inline">
+                                <button type="submit" class="btn btn-warning btn-sm text-white">↺</button>
+                            </form>
+                            <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST" class="d-inline">
+                                <button type="submit" class="btn btn-danger btn-sm text-white">🗑️</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

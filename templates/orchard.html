@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Orchard View{% endblock %}
+{% block content %}
+    <h1>Orchard View (Priority 1 Tasks)</h1>
+    <div class="orchard-container">
+        {% for project in projects %}
+            <div class="project-card">
+                <h3><a href="{{ url_for('project_tree', project_id=project.id) }}">{{ project.name }}</a></h3>
+                {% for task in project.priority_1_tasks %}
+                    <div class="task-box" style="background-color: {{ task.color }}">{{ task.description }}</div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

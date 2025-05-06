@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Edit Task - {{ task.description }}{% endblock %}
+{% block content %}
+    <h1>Edit Task in {{ project.name }}</h1>
+    <form method="POST">
+        <div class="mb-3">
+            <label for="description" class="form-label">Task Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required>{{ task.description }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="priority" class="form-label">Priority</label>
+            <input type="number" class="form-control" id="priority" name="priority" min="1" value="{{ task.priority }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="due_date" class="form-label">Due Date (optional)</label>
+            <input type="date" class="form-control" id="due_date" name="due_date" value="{{ task.due_date.strftime('%Y-%m-%d') if task.due_date else '' }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Background Color</label>
+            <div class="color-swatches">
+                {% for color in pastel_colors %}
+                    <div class="color-swatch {% if color == task.color %}selected{% endif %}" style="background-color: {{ color }}" data-color="{{ color }}"></div>
+                {% endfor %}
+            </div>
+            <input type="hidden" id="selected-color" name="color" value="{{ task.color }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+{% endblock %}
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/color_picker.js') }}"></script>
+{% endblock %}

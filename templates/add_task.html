@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Add Task to {{ project.name }}{% endblock %}
+{% block content %}
+    <h1>Add Task to {{ project.name }}</h1>
+    <form method="POST">
+        <div class="mb-3">
+            <label for="description" class="form-label">Task Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="priority" class="form-label">Priority</label>
+            <input type="number" class="form-control" id="priority" name="priority" min="1" value="1" required>
+        </div>
+        <div class="mb-3">
+            <label for="due_date" class="form-label">Due Date (optional)</label>
+            <input type="date" class="form-control" id="due_date" name="due_date">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Background Color</label>
+            <div class="color-swatches">
+                {% for color in pastel_colors %}
+                    <div class="color-swatch" style="background-color: {{ color }}" data-color="{{ color }}"></div>
+                {% endfor %}
+            </div>
+            <input type="hidden" id="selected-color" name="color" value="#FFFFFF">
+        </div>
+        <button type="submit" class="btn btn-primary">Add Task</button>
+    </form>
+{% endblock %}
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/color_picker.js') }}"></script>
+{% endblock %}
