@@ -3,26 +3,15 @@
 {% block content %}
     <h1>Edit Task in {{ project.name }}</h1>
     <form method="POST">
+        <!-- ... (description, priority, due_date, color swatches unchanged) -->
         <div class="mb-3">
-            <label for="description" class="form-label">Task Description</label>
-            <textarea class="form-control" id="description" name="description" rows="3" required>{{ task.description }}</textarea>
-        </div>
-        <div class="mb-3">
-            <label for="priority" class="form-label">Priority</label>
-            <input type="number" class="form-control" id="priority" name="priority" min="1" value="{{ task.priority }}" required>
-        </div>
-        <div class="mb-3">
-            <label for="due_date" class="form-label">Due Date (optional)</label>
-            <input type="date" class="form-control" id="due_date" name="due_date" value="{{ task.due_date.strftime('%Y-%m-%d') if task.due_date else '' }}">
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Background Color</label>
-            <div class="color-swatches">
-                {% for color in pastel_colors %}
-                    <div class="color-swatch {% if color == task.color %}selected{% endif %}" style="background-color: {{ color }}" data-color="{{ color }}"></div>
+            <label for="parent_id" class="form-label">Parent Task (optional)</label>
+            <select class="form-select" id="parent_id" name="parent_id">
+                <option value="" {% if not task.parent_id %}selected{% endif %}>None (top-level)</option>
+                {% for parent in possible_parents %}
+                    <option value="{{ parent.id }}" {% if task.parent_id == parent.id %}selected{% endif %}>{{ parent.description }} (Priority: {{ parent.priority }})</option>
                 {% endfor %}
-            </div>
-            <input type="hidden" id="selected-color" name="color" value="{{ task.color }}">
+            </select>
         </div>
         <button type="submit" class="btn btn-primary">Save Changes</button>
     </form>

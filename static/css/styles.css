@@ -71,9 +71,9 @@
 
 /* Tree View */
 .task-square {
-    width: 200px; /* Increased from 120px */
-    height: 200px; /* Increased from 120px */
-    padding: 15px; /* Increased from 10px */
+    width: 200px;
+    height: 200px;
+    padding: 15px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -81,7 +81,8 @@
     text-align: center;
     border: 1px solid #ccc;
     text-decoration: none;
-    color: #000; /* Black text */
+    color: #000;
+    position: relative; /* Helps with LeaderLine positioning */
 }
 
 .task-square a {
@@ -212,4 +213,25 @@
 .task-item .task-actions {
     display: flex;
     gap: 5px;
+}
+
+.task-groups {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+}
+
+.task-branch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.subtasks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
 }

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Stats{% endblock %}
+{% block content %}
+    <h1>Task Statistics</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Project</th>
+                <th>Completed</th>
+                <th>Outstanding</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in stats %}
+                <tr>
+                    <td><a href="{{ url_for('project_tree', project_id=s.project.id) }}">{{ s.project.name }}</a></td>
+                    <td>{{ s.completed }}</td>
+                    <td>{{ s.outstanding }}</td>
+                    <td>{{ s.total }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Total</th>
+                <th>{{ total_completed }}</th>
+                <th>{{ total_outstanding }}</th>
+                <th>{{ total_completed + total_outstanding }}</th>
+            </tr>
+        </tfoot>
+    </table>
+{% endblock %}

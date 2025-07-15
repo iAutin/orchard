@@ -6,7 +6,7 @@
         {% for project in projects %}
             <div class="project-list-item">
                 <h3>
-                    {{ project.name }}
+                    <a href="{{ url_for('project_tree', project_id=project.id) }}">{{ project.name }}</a>
                     <a href="{{ url_for('add_task', project_id=project.id) }}" class="btn btn-primary btn-sm ms-2">+</a>
                 </h3>
                 {% if project.tasks_sorted %}
