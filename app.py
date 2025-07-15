@@ -188,7 +188,7 @@ def stats():
         stats.append({'project': p, 'completed': completed, 'outstanding': outstanding, 'total': completed + outstanding})
         total_completed += completed
         total_outstanding += outstanding
-    return render_template('stats.html', stats=stats, total_completed=total_completed, total_outstanding=total_outstanding'])
+    return render_template('stats.html', stats=stats, total_completed=total_completed, total_outstanding=total_outstanding)
 
 if __name__ == '__main__':
     with app.app_context():
