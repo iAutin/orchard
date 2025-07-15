@@ -4,64 +4,53 @@
     <h1>{{ project.name }}</h1>
     <a href="{{ url_for('add_task', project_id=project.id) }}" class="btn btn-primary mb-3">Add Task</a>
     <div class="tree">
-        <div class="task-groups">
-            {% macro render_task(task) %}
-                <div class="task-square" id="task-{{ task.id }}" data-parent-id="{{ task.parent_id or '' }}" style="background-color: {{ task.color }}">
-                    <div class="task-content">
-                        <a href="{{ url_for('edit_task', task_id=task.id) }}">
-                            <span>{{ task.description }}</span>
+        {% for priority in priorities|sort(reverse=True) %}
+            <div class="task-group">
+                <h3>Priority {{ priority }}</h3>
+                <div class="task-row">
+                    {% for task in unfinished_tasks if task.priority == priority %}
+                        <a href="{{ url_for('edit_task', task_id=task.id) }}" class="task-square" style="background-color: {{ task.color }}">
+                            <div class="task-content">
+                                <span>{{ task.description }}</span>
+                                {% if task.due_date %}
+                                    <span class="task-due-date">Due: {{ task.due_date.strftime('%Y-%m-%d') }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="task-actions">
+                                <form action="{{ url_for('complete_task', task_id=task.id) }}" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-success btn-sm text-white">✓</button>
+                                </form>
+                                <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-danger btn-sm text-white">🗑️</button>
+                                </form>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+        <h3>Trunk (Completed Tasks)</h3>
+        <div class="completed-group">
+            <div class="task-row">
+                {% for task in completed_tasks %}
+                    <div class="task-square completed-task" style="background-color: {{ task.color }}">
+                        <div class="task-content">
+                            <span>{{ task.description }} (Priority {{ task.priority }})</span>
                             {% if task.due_date %}
                                 <span class="task-due-date">Due: {{ task.due_date.strftime('%Y-%m-%d') }}</span>
                             {% endif %}
-                        </a>
+                        </div>
+                        <div class="task-actions">
+                            <form action="{{ url_for('uncomplete_task', task_id=task.id) }}" method="POST" class="d-inline">
+                                <button type="submit" class="btn btn-warning btn-sm text-white">↺</button>
+                            </form>
+                            <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST" class="d-inline">
+                                <button type="submit" class="btn btn-danger btn-sm text-white">🗑️</button>
+                            </form>
+                        </div>
                     </div>
-                    <div class="task-actions">
-                        <form action="{{ url_for('complete_task', task_id=task.id) }}" method="POST" class="d-inline">
-                            <button type="submit" class="btn btn-success btn-sm text-white">✔</button>
-                        </form>
-                        <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST" class="d-inline">
-                            <button type="submit" class="btn btn-danger btn-sm text-white">🗑️</button>
-                        </form>
-                    </div>
-                </div>
-                {% if task.subtasks %}
-                    <div class="subtasks">
-                        {% for sub in task.subtasks | sort(attribute='priority') %}
-                            {{ render_task(sub) }}
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            {% endmacro %}
-            {% for task in top_tasks %}
-                <div class="task-branch">
-                    {{ render_task(task) }}
-                </div>
-            {% endfor %}
-        </div>
-        <h3>Trunk (Completed Tasks)</h3>
-        <div id="trunk" class="d-flex flex-nowrap">
-            {% for task in completed_tasks %}
-                <div class="task-square completed-task" id="completed-{{ task.id }}" style="background-color: {{ task.color }}">
-                    <div class="task-content">
-                        <span class="completed-task">{{ task.description }} (Priority {{ task.priority }})</span>
-                        {% if task.due_date %}
-                            <span class="task-due-date">Due: {{ task.due_date.strftime('%Y-%m-%d') }}</span>
-                        {% endif %}
-                    </div>
-                    <div class="task-actions">
-                        <form action="{{ url_for('uncomplete_task', task_id=task.id) }}" method="POST" class="d-inline">
-                            <button type="submit" class="btn btn-warning btn-sm text-white">↺</button>
-                        </form>
-                        <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST" class="d-inline">
-                            <button type="submit" class="btn btn-danger btn-sm text-white">🗑️</button>
-                        </form>
-                    </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         </div>
     </div>
-{% endblock %}
-{% block scripts %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leader-line/1.0.7/leader-line.min.js"></script> [](grok_render_citation_card_json={"cardIds":["223d51"]})
-    <script src="{{ url_for('static', filename='js/connections.js') }}"></script>
 {% endblock %}

@@ -3,15 +3,26 @@
 {% block content %}
     <h1>Add Task to {{ project.name }}</h1>
     <form method="POST">
-        <!-- ... (description, priority, due_date, color swatches unchanged) -->
         <div class="mb-3">
-            <label for="parent_id" class="form-label">Parent Task (optional)</label>
-            <select class="form-select" id="parent_id" name="parent_id">
-                <option value="">None (top-level)</option>
-                {% for parent in possible_parents %}
-                    <option value="{{ parent.id }}">{{ parent.description }} (Priority: {{ parent.priority }})</option>
+            <label for="description" class="form-label">Task Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="priority" class="form-label">Priority</label>
+            <input type="number" class="form-control" id="priority" name="priority" min="1" value="1" required>
+        </div>
+        <div class="mb-3">
+            <label for="due_date" class="form-label">Due Date (optional)</label>
+            <input type="date" class="form-control" id="due_date" name="due_date">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Background Color</label>
+            <div class="color-swatches">
+                {% for color in pastel_colors %}
+                    <div class="color-swatch" style="background-color: {{ color }}" data-color="{{ color }}"></div>
                 {% endfor %}
-            </select>
+            </div>
+            <input type="hidden" id="selected-color" name="color" value="#FFFFFF">
         </div>
         <button type="submit" class="btn btn-primary">Add Task</button>
     </form>
@@ -19,3 +30,4 @@
 {% block scripts %}
     <script src="{{ url_for('static', filename='js/color_picker.js') }}"></script>
 {% endblock %}
+

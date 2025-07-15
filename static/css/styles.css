@@ -95,12 +95,12 @@
     color: #000; /* Stay black on hover */
 }
 
+
 .task-row {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     justify-content: flex-start;
-    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 .task-content {
@@ -127,6 +127,9 @@
 }
 
 .task-group {
+    margin-bottom: 20px;
+}
+.task-group, .completed-group {
     margin-bottom: 20px;
 }
 
@@ -235,3 +238,4 @@
     gap: 10px;
     justify-content: center;
 }
+
